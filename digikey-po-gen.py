@@ -117,7 +117,7 @@ def main(args):
 
     #find lowest price break for our quantity
     bomQuantity = args.quantity
-    digireelCost = args.digireel_cost
+    digireelCost = args.digireel_cost if args.digireel_cost is not None else 0
     purchaseOrder = {}
     bReelsOnly = args.reels
 
