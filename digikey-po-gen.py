@@ -48,9 +48,11 @@ class DigikeySearch(object):
     def fetch_pricing_(self):
         #search for each digikey part number to get the pricing
         for product in self.products:
-            data = {'keywords':product['dkPartNumber']}
+            #search for both vendor and digikey part number as some part numbers are subsets
+            # and we want this search to lead directly to the product page
+            data = {'keywords':" ".join([product['dkPartNumber'], product['vendor']])}
             params = urllib.parse.urlencode(data)
-            url = "http://%s/product-search/en?%s" % (self.url, params)
+            url = "http://%s/products/en?%s" % (self.url, params)
             with urllib.request.urlopen(url) as f:
                 soup = BeautifulSoup(f.read().decode('utf-8'), "lxml")
                 table = soup.html.find('table', dict(id='product-dollars'))
