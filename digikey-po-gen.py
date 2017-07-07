@@ -169,7 +169,7 @@ def main(args):
         for key in sorted(purchaseOrder):
             value = purchaseOrder[key]
             if value is not None and len(value) >= 3 and value[0] is not None:
-                writer.writerow({'Part Number':key, 'DK PN':value[0]['dkPartNumber'], 'vendor':value[0]['vendor'], 'mfgPartNumber':value[0]['mfgPartNumber'], 'Qty':value[1], 'Unit Price':value[2]/value[1]})
+                writer.writerow({'Part Number':key, 'DK PN':value[0]['dkPartNumber'], 'vendor':value[0]['vendor'], 'mfgPartNumber':value[0]['mfgPartNumber'], 'Qty':value[1], 'Unit Price':value[2]})
             else:
                 writer.writerow({'Part Number':key, 'vendor':'missing'})
 
