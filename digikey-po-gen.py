@@ -61,7 +61,7 @@ class DigikeySearch(object):
                     for row in table.find_all('tr'):
                         cols = [ele.text.strip() for ele in row.find_all('td')]
                         if len(cols): #strip out comma as thousands separator
-                            pricing.append([float(ele.replace(',','')) for ele in cols if ele])
+                            pricing.append([float(ele.replace(',','').replace('$','')) for ele in cols if ele])
                     product['pricing'] = pricing
         
     def search(self, keyword):
@@ -72,9 +72,11 @@ class DigikeySearch(object):
         with urllib.request.urlopen(url) as f:
             soup = BeautifulSoup(f.read().decode('utf-8'), "lxml")
 
-        productTable = soup.html.find('table', dict(id='productTable')).find('tbody')
-        self.process_table_(productTable)
-        self.fetch_pricing_()
+        productTable = soup.html.find('table', dict(id='productTable'))
+        if productTable is not None:
+            productTable = productTable.find('tbody')
+            self.process_table_(productTable)
+            self.fetch_pricing_()
             
     def exact_matches(self):
         results = []
@@ -103,6 +105,10 @@ def main(args):
     digikeyCatalog = {}
     #Search digikey for each part in BOM
     for key, value in bomList.items():
+        if key not in partList:
+            print(key, " is missing from parts list")
+            continue
+
         part = partList[key]
         for mfg, mpn in (('Mfg1', 'Mpn1'),('Mfg2','Mpn2')):
             if part[mfg] and part[mpn]:
